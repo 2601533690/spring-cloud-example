@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.admin.dao.MenuDao">
+
+    <resultMap id="BaseResult" type="com.example.admin.po.MenuPo">
+        <id property="id" column="id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="level" column="level"/>
+        <result property="name" column="name"/>
+        <result property="uri" column="uri"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectListByUserId" resultMap="BaseResult">
+        SELECT
+          M.*
+        FROM
+          menu M
+        LEFT JOIN
+          role_menu RM
+        ON
+          RM.menu_id = M.id
+        LEFT JOIN
+          role R
+        ON
+          RM.role_id = R.id
+        LEFT JOIN
+          admin A
+        ON
+          R.id = A.role_id
+        WHERE
+          A.id = #{userId}
+        ORDER BY M.id ASC
+    </select>
+
+</mapper>
